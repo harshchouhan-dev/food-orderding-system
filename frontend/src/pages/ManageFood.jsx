@@ -6,7 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaSearch, FaEdit, FaTrashAlt, FaUtensils, FaFileCsv } from 'react-icons/fa';
 
-const API_BASE = 'http://127.0.0.1:8000';
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const ManageFood = () => {
   const [foodItems, setFoodItems] = useState([]);

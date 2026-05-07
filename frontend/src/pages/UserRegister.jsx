@@ -31,7 +31,7 @@ const UserRegister = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/register/', {
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/register/`, {
         first_name: formData.first_name,
         last_name: formData.last_name,
         email: formData.email,

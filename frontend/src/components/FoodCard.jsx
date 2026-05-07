@@ -2,7 +2,7 @@ import { FaShoppingCart, FaStar, FaFire } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
 import { toast } from 'react-toastify';
 
-const API_BASE = 'http://127.0.0.1:8000';
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const FoodCard = ({ food }) => {
   const { addToCart } = useCart();

@@ -18,7 +18,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/dashboard-stats/');
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/dashboard-stats/`);
         setStats(response.data);
       } catch (error) {
         console.error('Error fetching stats:', error);

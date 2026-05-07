@@ -8,7 +8,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const API_BASE = 'http://127.0.0.1:8000';
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, clearCart, getCartTotal, getCartCount } = useCart();
@@ -42,7 +42,7 @@ const Cart = () => {
         })),
       };
 
-      const response = await axios.post('http://127.0.0.1:8000/api/place-order/', orderData);
+      const response = await axios.post(`${API_BASE}/api/place-order/`, orderData);
 
       if (response.status === 201) {
         clearCart();

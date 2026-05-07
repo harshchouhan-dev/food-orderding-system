@@ -16,7 +16,7 @@ const UserLogin = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/user-login/', { email, password });
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/user-login/`, { email, password });
 
       if (response.status === 200) {
         localStorage.setItem('foodiehub_user', JSON.stringify(response.data.user));

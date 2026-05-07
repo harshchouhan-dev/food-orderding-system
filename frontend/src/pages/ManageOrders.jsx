@@ -25,8 +25,8 @@ const ManageOrders = () => {
   const fetchOrders = async () => {
     try {
       const url = statusFilter === 'all'
-        ? 'http://127.0.0.1:8000/api/orders/'
-        : `http://127.0.0.1:8000/api/orders/?status=${statusFilter}`;
+        ? `${import.meta.env.VITE_API_BASE_URL}/api/orders/`
+        : `${import.meta.env.VITE_API_BASE_URL}/api/orders/?status=${statusFilter}`;
       const response = await axios.get(url);
       setOrders(response.data);
     } catch (error) {
@@ -43,7 +43,7 @@ const ManageOrders = () => {
 
   const updateStatus = async (orderId, newStatus) => {
     try {
-      await axios.put(`http://127.0.0.1:8000/api/orders/${orderId}/status/`, { status: newStatus });
+      await axios.put(`${import.meta.env.VITE_API_BASE_URL}/api/orders/${orderId}/status/`, { status: newStatus });
       toast.success(`Order status updated to ${statusConfig[newStatus]?.label || newStatus}`);
       fetchOrders();
       setSelectedOrder(null);
@@ -55,7 +55,7 @@ const ManageOrders = () => {
   const deleteOrder = async (orderId) => {
     if (!window.confirm('Are you sure you want to delete this order?')) return;
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/orders/${orderId}/delete/`);
+      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/orders/${orderId}/delete/`);
       toast.success('Order deleted');
       fetchOrders();
     } catch (error) {

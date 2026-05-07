@@ -9,7 +9,7 @@ const AdminHeader = ({ toggleSidebar, sidebarOpen }) => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/admin-logout/');
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/admin-logout/`);
       toast.success(response.data.message);
       setTimeout(() => {
         navigate('/admin-login');

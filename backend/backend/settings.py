@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6o0mr4^=0a3ar6tkk1#5%n&h8!li-r6p0_0foxqo4)#u7u26u8'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='', cast=Csv())
 
 
 # Application definition
@@ -57,7 +58,13 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'backend.urls'
 
 
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS Settings
+_cors_origins = config('CORS_ALLOWED_ORIGINS', default='*')
+if _cors_origins == '*':
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    CORS_ALLOW_ALL_ORIGINS = False
+    CORS_ALLOWED_ORIGINS = [origin.strip() for origin in _cors_origins.split(',')]
 
 TEMPLATES = [
     {
@@ -82,12 +89,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "foodDb",
-        "USER": "postgres",
-        "PASSWORD": "harsh1234",
-        "HOST": "localhost",
-        "PORT": "5432",
+        "ENGINE": config('DB_ENGINE', default='django.db.backends.postgresql'),
+        "NAME": config('DB_NAME', default='foodDb'),
+        "USER": config('DB_USER', default='postgres'),
+        "PASSWORD": config('DB_PASSWORD', default=''),
+        "HOST": config('DB_HOST', default='localhost'),
+        "PORT": config('DB_PORT', default='5432'),
     }
 }
 

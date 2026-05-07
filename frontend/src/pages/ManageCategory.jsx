@@ -14,7 +14,7 @@ const ManageCategory = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/categories/');
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/categories/`);
       setCategories(response.data);
       setAllCategories(response.data);
     } catch (error) {
@@ -41,7 +41,7 @@ const ManageCategory = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this category?')) return;
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/categories/${id}/delete/`);
+      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/categories/${id}/delete/`);
       toast.success('Category deleted successfully');
       fetchCategories();
     } catch (error) {
@@ -56,7 +56,7 @@ const ManageCategory = () => {
 
   const handleSaveEdit = async (id) => {
     try {
-      await axios.put(`http://127.0.0.1:8000/api/categories/${id}/update/`, {
+      await axios.put(`${import.meta.env.VITE_API_BASE_URL}/api/categories/${id}/update/`, {
         category_name: editValue,
       });
       toast.success('Category updated successfully');
