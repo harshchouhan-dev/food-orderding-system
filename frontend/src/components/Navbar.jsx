@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { FaBars, FaTimes, FaShoppingCart, FaUser, FaUtensils } from 'react-icons/fa';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FaBars, FaTimes, FaShoppingCart, FaUser, FaUtensils, FaSignOutAlt } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 import { useCart } from '../context/CartContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState(null);
   const { getCartCount } = useCart();
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,7 +22,17 @@ const Navbar = () => {
 
   useEffect(() => {
     setIsOpen(false);
+    // Re-check user login state on every route change
+    const stored = localStorage.getItem('foodiehub_user');
+    setUser(stored ? JSON.parse(stored) : null);
   }, [location]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('foodiehub_user');
+    setUser(null);
+    toast.success('Logged out successfully!');
+    navigate('/');
+  };
 
   const navLinks = [
     { to: '/', label: 'Home' },
@@ -88,13 +101,29 @@ const Navbar = () => {
                 </span>
               )}
             </Link>
-            <Link
-              to="/user-login"
-              className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-5 py-2.5 rounded-xl font-medium text-sm hover:shadow-lg hover:shadow-orange-500/30 hover:-translate-y-0.5 transition-all duration-300"
-            >
-              <FaUser className="text-sm" />
-              Login
-            </Link>
+
+            {user ? (
+              <div className="flex items-center gap-2">
+                <span className={`text-sm font-medium ${scrolled ? 'text-gray-700' : 'text-white/90'}`}>
+                  Hi, {user.first_name}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 border border-red-400 text-red-500 px-4 py-2 rounded-xl font-medium text-sm hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-300"
+                >
+                  <FaSignOutAlt className="text-sm" />
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/user-login"
+                className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-5 py-2.5 rounded-xl font-medium text-sm hover:shadow-lg hover:shadow-orange-500/30 hover:-translate-y-0.5 transition-all duration-300"
+              >
+                <FaUser className="text-sm" />
+                Login
+              </Link>
+            )}
           </div>
 
           {/* Mobile Toggle */}
@@ -134,13 +163,24 @@ const Navbar = () => {
               )}
             </Link>
           ))}
-          <Link
-            to="/user-login"
-            className="flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-5 py-3 rounded-xl font-medium text-sm mt-2"
-          >
-            <FaUser className="text-sm" />
-            Login / Register
-          </Link>
+
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center justify-center gap-2 border border-red-400 text-red-500 px-5 py-3 rounded-xl font-medium text-sm mt-2 hover:bg-red-500 hover:text-white transition-all duration-300"
+            >
+              <FaSignOutAlt className="text-sm" />
+              Logout ({user.first_name})
+            </button>
+          ) : (
+            <Link
+              to="/user-login"
+              className="flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-5 py-3 rounded-xl font-medium text-sm mt-2"
+            >
+              <FaUser className="text-sm" />
+              Login / Register
+            </Link>
+          )}
         </div>
       </div>
     </nav>
